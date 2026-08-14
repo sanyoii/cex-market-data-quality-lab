@@ -1,6 +1,8 @@
 # CEX Market Data Quality Lab
 
-Status: Publication candidate. Public repository and CI verification are pending.
+[![Tests](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml/badge.svg)](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml)
+
+Status: Published and verified. Deterministic CI and manual live market-data checks passed on 2026-08-14.
 
 This Python／pytest project checks Binance Spot public market data across REST snapshots and WebSocket updates. It focuses on contract failures that can corrupt a local order book: stale events, sequence gaps, invalid numeric values, crossed prices, and unbounded waits.
 
@@ -57,6 +59,7 @@ The deterministic command does not require network access. The live command call
 - [Test cases](docs/test-cases.md)
 - [Risk analysis](docs/risk-analysis.md)
 - [Limitations](docs/limitations.md)
+- [Public CI and live verification](evidence/2026-08-14-public-ci-run.md)
 - Fresh execution records belong in [`evidence/`](evidence/README.md).
 
 GitHub Actions runs deterministic tests on pushes and pull requests with Python 3.12 and 3.14. A manual workflow runs live tests. Both jobs retain JUnit XML even when tests fail.

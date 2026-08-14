@@ -1,6 +1,6 @@
 # Local Test Record: 2026-08-14
 
-Status: Publication candidate. Public repository and CI verification are pending.
+Status: Local execution record. See the [public CI and live verification](2026-08-14-public-ci-run.md) for GitHub-hosted results.
 
 ## Environment
 
@@ -75,8 +75,8 @@ Secret-pattern scan: 0 candidate assignments or token patterns.
 stop-slop phrase and em-dash scan: 0 hits.
 ```
 
-## Skipped／not proven
+## Not proven by this local run
 
-- GitHub Actions was not run because no public repository or commit exists.
-- Python 3.12 CI compatibility remains unverified. Local execution used Python 3.14.2.
-- Public CI verification, CI badges, Portfolio links, resume links, and LinkedIn Featured links remain pending.
+- GitHub Actions did not exist when this local record was captured. A later public record verifies the committed source.
+- Python 3.12 was not tested locally. A later public CI run verifies Python 3.12.
+- Portfolio links, resume links, and LinkedIn Featured links are outside this test record.

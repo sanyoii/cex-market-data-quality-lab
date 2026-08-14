@@ -11,3 +11,8 @@ Each execution record must include:
 - Generated JUnit paths and hashes when available.
 
 Keep failed and blocked attempts after a later pass. A successful rerun does not erase the original failure or its cause.
+
+## Records
+
+- [2026-08-14 local deterministic and live run](2026-08-14-local-live-run.md)
+- [2026-08-14 public CI and live verification](2026-08-14-public-ci-run.md)
