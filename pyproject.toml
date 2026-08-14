@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cex-market-data-quality-lab"
+version = "0.1.0"
+description = "Evidence-focused REST and WebSocket quality checks for public CEX market data."
+requires-python = ">=3.12"
+dependencies = [
+  "httpx==0.28.1",
+  "websockets==17.0.1",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest==9.1.1",
+  "pytest-asyncio==1.4.0",
+  "pytest-timeout==2.4.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+  "live: requires the public Binance market-data service and network access",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
