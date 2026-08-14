@@ -2,19 +2,19 @@
 
 [![Tests](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml/badge.svg)](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml)
 
-Status: Local review candidate with uncommitted code and documentation changes. The published implementation baseline passed deterministic CI and manually triggered live automation on 2026-08-14.
+Status: Local review candidate with uncommitted documentation changes on public head `a09ad29`. The recorded implementation baseline passed deterministic CI and manually triggered live automation on 2026-08-14.
 
 This Python／pytest project validates Binance Spot public market data across REST snapshots and WebSocket updates. It focuses on failures that can silently corrupt a local order book: stale events, sequence gaps, invalid numeric values, crossed prices, mismatched control acknowledgements, and unbounded waits.
 
-Sanyo built this personal portfolio project outside Binance and BTSE work. It uses no API key, authentication, account data, order placement, or real funds.
+I built this personal portfolio project independently from my work at Binance and BTSE. I use no API key, authentication, account data, order placement, or real funds.
 
 ## Verification at a glance
 
 | State | Revision／source state | Evidence |
 |---|---|---|
-| Local review candidate | Uncommitted changes on `9ce65e03b834c79c95bf2488c471be68cb7b1166` | 39 deterministic results passed on Windows／Python 3.14; public CI pending |
+| Local review candidate | Uncommitted documentation changes on `a09ad29e34d05a7fd9509379c0e1f56b4be19cab` | Documentation gates and 39 deterministic results passed locally; public CI pending |
 | Published implementation baseline | `b1397ef67a0b1d364a4d776c21effac6e4d452c1` | 25 deterministic results passed on Python 3.12／3.14 and 5 live results passed on Python 3.14 |
-| Published repository head before this candidate | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | [Deterministic run 31813499294](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813499294) and [live run 31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) passed with 0 annotations |
+| Prior published repository verification | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | [Deterministic run 31813499294](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813499294) and [live run 31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) passed with 0 annotations |
 
 Reviewer path: read this table, inspect the [Traceability Matrix](docs/traceability-matrix.md), then open the [Test Run records](evidence/README.md). Human exploratory charters are designed but have not been executed.
 
@@ -47,8 +47,11 @@ flowchart LR
 | Test Scripts | 3 production modules and 6 pytest modules with complete case-to-function mapping |
 | Test Runs | Versioned local and GitHub-hosted results with JUnit artifacts |
 | Summary | Release conclusion, limitations, and retained defect history |
+| Manual testing | Human-executed plan, scenarios, suites, cases, procedures, evidence, and defect handling |
 
 Canonical index: [Test Specification](docs/test-specification.md).
+
+Manual path: [Manual QA Lifecycle](docs/manual-testing-lifecycle.md). Its status is Designed, not executed.
 
 ## Requirements and business rules
 
@@ -259,7 +262,7 @@ The matrix maps 9／9 requirements, 9／9 scenarios, and 39／39 logical Test Ca
 | Run | Revision | Environment | Result | Artifacts |
 |---|---|---|---|---|
 | Local deterministic baseline | Uncommitted candidate recorded on 2026-08-14 | Windows, Python 3.14.2 | 25 passed | Local JUnit hash recorded |
-| Local review candidate | Uncommitted changes on `9ce65e03b834c79c95bf2488c471be68cb7b1166` | Windows, Python 3.14.2 | 39 deterministic and 5 live passed | [Current local receipt](evidence/2026-08-15-local-candidate-run.md) |
+| Previous local candidate | Uncommitted changes on `9ce65e03b834c79c95bf2488c471be68cb7b1166` | Windows, Python 3.14.2 | 39 deterministic and 5 live passed | [Local receipt](evidence/2026-08-15-local-candidate-run.md) |
 | Local live | Same local candidate | Windows, Python 3.14.2 | 5 passed | Local JUnit hash recorded |
 | Public deterministic | `b1397ef67a0b1d364a4d776c21effac6e4d452c1` | GitHub-hosted Ubuntu, Python 3.12／3.14 | 25 passed on each version | JUnit artifacts |
 | Public live automation | Same implementation revision | GitHub-hosted Ubuntu, Python 3.14 | 5 passed | Manually triggered live JUnit artifact |
@@ -314,6 +317,7 @@ The deterministic command requires no network access. The live command calls pub
 - [Test Data Profiles](docs/test-data-profiles.md)
 - [Automation Map](docs/automation-map.md)
 - [Requirements Traceability Matrix](docs/traceability-matrix.md)
+- [Manual QA Lifecycle](docs/manual-testing-lifecycle.md)
 - [Exploratory Test Charters](docs/exploratory-charters.md)
 - [Test Summary Report](docs/test-summary-report.md)
 - [Test Run Evidence](evidence/README.md)

@@ -16,6 +16,7 @@ Keep failed and blocked attempts after a later pass. A successful rerun does not
 ## Records
 
 - [Reusable Test Run template](TEMPLATE.md)
+- [Manual Test Run template](MANUAL_TEMPLATE.md)
 - [2026-08-15 local candidate deterministic and live run](2026-08-15-local-candidate-run.md)
 - [2026-08-14 local deterministic and live run](2026-08-14-local-live-run.md)
 - [2026-08-14 public CI and live verification](2026-08-14-public-ci-run.md)

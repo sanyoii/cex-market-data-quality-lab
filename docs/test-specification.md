@@ -26,6 +26,7 @@ Requirement and Business Rules
 | Test Suites | [test-suites.md](test-suites.md) |
 | Test Scripts and assertions | [automation-map.md](automation-map.md), `tests/` |
 | Requirements traceability | [traceability-matrix.md](traceability-matrix.md) |
+| Manual QA lifecycle | [manual-testing-lifecycle.md](manual-testing-lifecycle.md) |
 | Test Runs and artifacts | [`evidence/`](../evidence/README.md) |
 | Exploratory test charters | [exploratory-charters.md](exploratory-charters.md) |
 | Defect history and release conclusion | [test-summary-report.md](test-summary-report.md) |
@@ -37,6 +38,7 @@ Requirement and Business Rules
 - Business rules: `BR-*`
 - Scenarios: `SCN-*`
 - Test Cases: `OB-*`, `REST-*`, `WS-*`, `DOC-*`, `LIVE-*`
+- Manual Test Cases: `MTC-*`
 - Test Data Profiles: `DATA-*`
 - Test Suites: `SUITE-*`
 - Defects: `DEF-*`
@@ -45,3 +47,5 @@ Requirement and Business Rules
 No Jira integration exists for this portfolio project. Project-local IDs provide stable traceability without implying an external ticket record.
 
 Human exploratory testing has not been executed. The charter document records planned sessions without claiming test evidence.
+
+The manual lifecycle is also Designed, not executed. Its `MTC-*` cases do not contribute to automated pytest counts.
