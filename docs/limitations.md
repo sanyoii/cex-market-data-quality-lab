@@ -6,4 +6,5 @@
 - The local order book uses a 100-level snapshot for a short test window. It does not provide a production trading view or cover price levels outside that snapshot.
 - The client stops on a sequence gap. It reports the need to resynchronize but does not run a long-lived reconnect loop.
 - The project uses one exchange and one default symbol. It does not claim cross-exchange compatibility.
-- Current local evidence comes from Windows and Python 3.14. GitHub Actions must verify Python 3.12 and 3.14 after publication.
+- Local evidence comes from Windows and Python 3.14. Public GitHub Actions evidence verifies deterministic execution on Python 3.12 and 3.14 and a manually triggered live automation run on Python 3.14.
+- Human exploratory charters are designed but have not been executed.

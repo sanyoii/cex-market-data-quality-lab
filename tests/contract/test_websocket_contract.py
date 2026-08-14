@@ -23,6 +23,12 @@ class FakeConnection:
         return self.messages.pop(0)
 
 
+class RawConnection(FakeConnection):
+    def __init__(self, messages):
+        self.messages = messages
+        self.sent = []
+
+
 class FakeConnectionContext:
     def __init__(self, connection):
         self.connection = connection
@@ -193,5 +199,49 @@ async def test_subscription_receive_timeout_is_bounded():
             "BTCUSDT",
             count=1,
             timeout=0.01,
+            connect=lambda url: FakeConnectionContext(connection),
+        )
+
+
+@pytest.mark.asyncio
+async def test_collect_book_tickers_rejects_malformed_json():
+    connection = RawConnection(["{not-json"])
+
+    with pytest.raises(WebSocketContractError, match="invalid JSON payload"):
+        await collect_book_tickers(
+            "BTCUSDT",
+            count=1,
+            connect=lambda url: FakeConnectionContext(connection),
+        )
+
+
+@pytest.mark.asyncio
+async def test_collect_book_tickers_rejects_non_object_json():
+    connection = RawConnection([json.dumps([None, 1])])
+
+    with pytest.raises(WebSocketContractError, match="expected a JSON object"):
+        await collect_book_tickers(
+            "BTCUSDT",
+            count=1,
+            connect=lambda url: FakeConnectionContext(connection),
+        )
+
+
+@pytest.mark.asyncio
+async def test_collect_book_tickers_rejects_missing_event_field():
+    connection = FakeConnection(
+        [
+            {"result": None, "id": 1},
+            {"u": 101, "s": "BTCUSDT", "b": "100", "B": "2", "a": "101"},
+        ]
+    )
+
+    with pytest.raises(
+        WebSocketContractError,
+        match="bookTicker event has invalid schema",
+    ):
+        await collect_book_tickers(
+            "BTCUSDT",
+            count=1,
             connect=lambda url: FakeConnectionContext(connection),
         )

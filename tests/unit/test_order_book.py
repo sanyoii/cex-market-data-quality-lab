@@ -158,3 +158,24 @@ def test_update_rejects_negative_quantity():
                 "a": [],
             }
         )
+
+
+@pytest.mark.parametrize(
+    "bids, asks",
+    [
+        ([], [["102", "3"]]),
+        ([["101", "1"]], []),
+    ],
+)
+def test_snapshot_rejects_an_empty_market_side(bids, asks):
+    with pytest.raises(
+        MarketInvariantError,
+        match="order book must contain both bids and asks",
+    ):
+        OrderBook.from_snapshot(
+            {
+                "lastUpdateId": 100,
+                "bids": bids,
+                "asks": asks,
+            }
+        )

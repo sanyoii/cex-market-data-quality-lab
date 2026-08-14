@@ -4,7 +4,9 @@ Status: Local execution record. See the [public CI and live verification](2026-0
 
 ## Environment
 
-- Recorded: `2026-08-14T14:40:36Z`
+- Start UTC: not captured in the original receipt
+- End UTC: not captured in the original receipt
+- Receipt recorded: `2026-08-14T14:40:36Z`
 - OS: Windows
 - Python: `3.14.2`
 - pytest: `9.1.1`
@@ -32,6 +34,8 @@ Result:
 Exit code: 0
 ```
 
+Counts: 25 collected, 25 passed, 0 failed, 0 skipped, 0 deselected. Retry count: 0.
+
 JUnit: `reports/deterministic-local.xml`
 SHA-256: `9965d429e9aa52fe8c31f9065f02908fca89832e0179448038e9bdf7ae15fa92`
 
@@ -49,6 +53,8 @@ Result:
 5 passed in 21.92s
 Exit code: 0
 ```
+
+Counts: 5 collected, 5 passed, 0 failed, 0 skipped, 0 deselected. Retry count: 0.
 
 The live run checked Binance public `exchangeInfo`, `bookTicker`, REST depth, the book-ticker stream, and REST snapshot／diff-depth synchronization for `BTCUSDT`.
 
@@ -80,3 +86,4 @@ stop-slop phrase and em-dash scan: 0 hits.
 - GitHub Actions did not exist when this local record was captured. A later public record verifies the committed source.
 - Python 3.12 was not tested locally. A later public CI run verifies Python 3.12.
 - Portfolio links, resume links, and LinkedIn Featured links are outside this test record.
+- No human exploratory charter was executed.

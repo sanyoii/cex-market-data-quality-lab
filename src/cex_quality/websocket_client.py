@@ -6,7 +6,7 @@ import asyncio
 import json
 from collections.abc import Callable
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Any
 
 import websockets
@@ -30,14 +30,19 @@ class BookTickerEvent:
 
     @classmethod
     def from_payload(cls, payload: dict[str, Any], expected_symbol: str) -> BookTickerEvent:
-        event = cls(
-            update_id=int(payload["u"]),
-            symbol=str(payload["s"]),
-            bid_price=Decimal(payload["b"]),
-            bid_quantity=Decimal(payload["B"]),
-            ask_price=Decimal(payload["a"]),
-            ask_quantity=Decimal(payload["A"]),
-        )
+        try:
+            event = cls(
+                update_id=int(payload["u"]),
+                symbol=str(payload["s"]),
+                bid_price=Decimal(payload["b"]),
+                bid_quantity=Decimal(payload["B"]),
+                ask_price=Decimal(payload["a"]),
+                ask_quantity=Decimal(payload["A"]),
+            )
+        except (InvalidOperation, KeyError, TypeError, ValueError) as exc:
+            raise WebSocketContractError(
+                "bookTicker event has invalid schema"
+            ) from exc
         if event.symbol != expected_symbol:
             raise WebSocketContractError(
                 f"expected symbol {expected_symbol}, received {event.symbol}"
@@ -134,7 +139,10 @@ async def _expect_ack(connection: Any, *, request_id: int, timeout: float) -> No
 
 async def _receive_json(connection: Any, timeout: float) -> dict[str, Any]:
     raw = await asyncio.wait_for(connection.recv(), timeout=timeout)
-    payload = json.loads(raw)
+    try:
+        payload = json.loads(raw)
+    except (json.JSONDecodeError, TypeError, UnicodeDecodeError) as exc:
+        raise WebSocketContractError("invalid JSON payload") from exc
     if not isinstance(payload, dict):
         raise WebSocketContractError("expected a JSON object")
     return payload

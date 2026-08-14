@@ -126,6 +126,25 @@ def test_exchange_info_returns_requested_trading_symbol_and_filters():
     assert info.filter_types == ("PRICE_FILTER", "LOT_SIZE")
 
 
+@pytest.mark.parametrize(
+    "symbols",
+    [[], [{"symbol": "BTCUSDT"}, {"symbol": "ETHUSDT"}]],
+)
+def test_exchange_info_requires_exactly_one_symbol(symbols):
+    transport = httpx.MockTransport(
+        lambda request: httpx.Response(200, json={"symbols": symbols})
+    )
+
+    with MarketDataRestClient(
+        base_url="https://market-data.invalid", transport=transport
+    ) as client:
+        with pytest.raises(
+            RestContractError,
+            match="exchangeInfo must return exactly one symbol",
+        ):
+            client.exchange_info("BTCUSDT")
+
+
 def test_book_ticker_rejects_non_positive_price_or_quantity():
     transport = httpx.MockTransport(
         lambda request: httpx.Response(
@@ -144,4 +163,44 @@ def test_book_ticker_rejects_non_positive_price_or_quantity():
         base_url="https://market-data.invalid", transport=transport
     ) as client:
         with pytest.raises(RestContractError, match="prices and quantities must be positive"):
+            client.book_ticker("BTCUSDT")
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {
+            "symbol": "BTCUSDT",
+            "bidPrice": "100.10",
+            "bidQty": "2.5",
+            "askPrice": "100.20",
+        },
+        ["BTCUSDT", "100.10", "2.5", "100.20", "3.5"],
+    ],
+)
+def test_book_ticker_rejects_invalid_response_schema(payload):
+    transport = httpx.MockTransport(
+        lambda request: httpx.Response(200, json=payload)
+    )
+
+    with MarketDataRestClient(
+        base_url="https://market-data.invalid", transport=transport
+    ) as client:
+        with pytest.raises(
+            RestContractError,
+            match="bookTicker response has invalid schema",
+        ):
+            client.book_ticker("BTCUSDT")
+
+
+def test_rest_transport_timeout_remains_diagnosable():
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout("market-data timeout", request=request)
+
+    with MarketDataRestClient(
+        base_url="https://market-data.invalid",
+        timeout=0.01,
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        with pytest.raises(httpx.ReadTimeout, match="market-data timeout"):
             client.book_ticker("BTCUSDT")

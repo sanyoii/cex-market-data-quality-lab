@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Any
 
 import httpx
@@ -67,13 +67,18 @@ class MarketDataRestClient:
             "/api/v3/ticker/bookTicker",
             params={"symbol": symbol.upper()},
         )
-        ticker = BookTicker(
-            symbol=str(payload["symbol"]),
-            bid_price=Decimal(payload["bidPrice"]),
-            bid_quantity=Decimal(payload["bidQty"]),
-            ask_price=Decimal(payload["askPrice"]),
-            ask_quantity=Decimal(payload["askQty"]),
-        )
+        try:
+            ticker = BookTicker(
+                symbol=str(payload["symbol"]),
+                bid_price=Decimal(payload["bidPrice"]),
+                bid_quantity=Decimal(payload["bidQty"]),
+                ask_price=Decimal(payload["askPrice"]),
+                ask_quantity=Decimal(payload["askQty"]),
+            )
+        except (InvalidOperation, KeyError, TypeError, ValueError) as exc:
+            raise RestContractError(
+                "bookTicker response has invalid schema"
+            ) from exc
         if min(
             ticker.bid_price,
             ticker.bid_quantity,

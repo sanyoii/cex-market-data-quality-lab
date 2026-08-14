@@ -31,7 +31,7 @@ jobs:
         run: python -m pip install -e '.[test]'
 
       - name: Run deterministic tests
-        run: python -m pytest tests/unit tests/contract -v --junitxml=reports/deterministic-${{ matrix.python-version }}.xml
+        run: python -m pytest tests/unit tests/contract tests/meta -v --junitxml=reports/deterministic-${{ matrix.python-version }}.xml
 
       - name: Upload deterministic result
         if: ${{ always() }}
@@ -41,7 +41,7 @@ jobs:
           path: reports/deterministic-${{ matrix.python-version }}.xml
 
   live:
-    name: Manual live market-data tests
+    name: Manually triggered live market-data automation
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:

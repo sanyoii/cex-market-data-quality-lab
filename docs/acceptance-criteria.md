@@ -1,6 +1,8 @@
 # Acceptance Criteria
 
-Status: Local implementation candidate. Public repository and CI evidence do not exist yet.
+Status: Local review candidate. Public CI and live evidence remain available for the 2026-08-14 baseline.
+
+Requirement IDs and business-rule sources are defined in [Requirements and Business Rules](requirements.md).
 
 ## Scope
 
@@ -22,5 +24,5 @@ The project checks Binance Spot public market data through REST and WebSocket in
 - A clean environment can install the declared dependencies and run the documented commands.
 - Deterministic tests pass without network access.
 - A fresh live REST and WebSocket run records its timestamp, Python version, source revision or local-state identifier, exact command, outcome, warnings, and limitations.
-- CI runs deterministic tests and uploads JUnit XML. Live tests run through a separate manual workflow job.
+- CI runs deterministic tests and uploads JUnit XML. Live automation runs through a separate manually triggered workflow job.
 - Public copy labels this work as a personal portfolio project. It must not imply Binance or BTSE employment ownership.
