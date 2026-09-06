@@ -24,22 +24,23 @@ Each case has one direction of execution and an observable assertion. Decision b
 | REST-007 | P1 | REQ-REST-003／SCN-003 | DATA-REST-CARDINALITY with zero or two `exchangeInfo` symbols | 1. Request exchange info. | Raise `RestContractError` unless the response contains one symbol. | SUITE-REST-CONTRACT |
 | REST-008 | P1 | REQ-REST-001／SCN-001 | DATA-SCHEMA-INVALID with a missing ticker field or non-object payload | 1. Request ticker. | Raise `RestContractError` with a stable schema message. | SUITE-REST-CONTRACT |
 | REST-009 | P1 | REQ-REST-004／SCN-004 | Mock transport raises `httpx.ReadTimeout` | 1. Request ticker. | Preserve `httpx.ReadTimeout` and its message. | SUITE-REST-CONTRACT |
-| WS-001 | P1 | REQ-WS-001, REQ-WS-002／SCN-005 | Matching acknowledgement IDs and one valid event | 1. Collect one ticker.<br>2. Inspect sent controls and event. | Subscribe, validate event, unsubscribe, and correlate IDs 1／2. | SUITE-WS-CONTRACT |
+| WS-001 | P1 | REQ-WS-001, REQ-WS-002／SCN-005 | Matching acknowledgment IDs and one valid event | 1. Collect one ticker.<br>2. Inspect sent controls and event. | Subscribe, validate event, unsubscribe, and correlate IDs 1／2. | SUITE-WS-CONTRACT |
 | WS-002 | P0 | REQ-WS-002／SCN-006 | Events with update IDs 102 then 101 | 1. Collect two events. | Raise `WebSocketContractError` when the update ID decreases. | SUITE-WS-CONTRACT |
 | WS-003 | P1 | REQ-WS-002／SCN-006 | Event symbol `ETHUSDT`; expected `BTCUSDT` | 1. Collect event. | Reject the wrong symbol with both expected and actual values. | SUITE-WS-CONTRACT |
 | WS-004 | P0 | REQ-WS-002／SCN-006 | Event with zero quantity | 1. Collect event. | Reject non-positive price or quantity. | SUITE-WS-CONTRACT |
 | WS-005 | P0 | REQ-WS-002／SCN-006 | Event with bid above ask | 1. Collect event. | Reject crossed market data. | SUITE-WS-CONTRACT |
-| WS-006 | P1 | REQ-WS-001／SCN-005 | Acknowledgement ID 99; expected ID 1 | 1. Start subscription. | Reject the mismatched acknowledgement. | SUITE-WS-CONTRACT |
-| WS-007 | P1 | REQ-WS-001／SCN-005 | Valid ticker arrives before unsubscribe acknowledgement | 1. Collect requested event.<br>2. Request unsubscribe.<br>3. Receive in-flight event and then matching acknowledgement. | Ignore the in-flight market event while waiting and complete normally. | SUITE-WS-CONTRACT |
+| WS-006 | P1 | REQ-WS-001／SCN-005 | Acknowledgment ID 99; expected ID 1 | 1. Start subscription. | Reject the mismatched acknowledgment. | SUITE-WS-CONTRACT |
+| WS-007 | P1 | REQ-WS-001／SCN-005 | Valid ticker arrives before unsubscribe acknowledgment | 1. Collect requested event.<br>2. Request unsubscribe.<br>3. Receive in-flight event and then matching acknowledgment. | Ignore the in-flight market event while waiting and complete normally. | SUITE-WS-CONTRACT |
 | WS-008 | P0 | REQ-SYNC-001／SCN-007 | Fake REST snapshot 100; stale 100 and continuous 101／102 events | 1. Buffer stream.<br>2. Load snapshot.<br>3. Apply two continuous updates. | Return synchronized book at update 102 with expected bid／ask levels. | SUITE-WS-CONTRACT |
-| WS-009 | P1 | REQ-WS-001／SCN-005 | Slow fake connection; timeout 0.01 seconds | 1. Start subscription.<br>2. Wait for acknowledgement. | Raise `TimeoutError` within the configured bound. | SUITE-WS-CONTRACT |
+| WS-009 | P1 | REQ-WS-001／SCN-005 | Slow fake connection; timeout 0.01 seconds | 1. Start subscription.<br>2. Wait for acknowledgment. | Raise `TimeoutError` within the configured bound. | SUITE-WS-CONTRACT |
 | WS-010 | P1 | REQ-WS-002／SCN-006 | DATA-SCHEMA-INVALID malformed JSON | 1. Start subscription.<br>2. Receive malformed payload. | Raise `WebSocketContractError` with an invalid-JSON message. | SUITE-WS-CONTRACT |
 | WS-011 | P1 | REQ-WS-002／SCN-006 | DATA-SCHEMA-INVALID JSON array | 1. Start subscription.<br>2. Receive non-object payload. | Raise `WebSocketContractError` because the protocol payload must be an object. | SUITE-WS-CONTRACT |
-| WS-012 | P1 | REQ-WS-002／SCN-006 | DATA-SCHEMA-INVALID ticker missing `A` after a valid acknowledgement | 1. Subscribe.<br>2. Receive incomplete ticker. | Raise `WebSocketContractError` with a stable schema message. | SUITE-WS-CONTRACT |
+| WS-012 | P1 | REQ-WS-002／SCN-006 | DATA-SCHEMA-INVALID ticker missing `A` after a valid acknowledgment | 1. Subscribe.<br>2. Receive incomplete ticker. | Raise `WebSocketContractError` with a stable schema message. | SUITE-WS-CONTRACT |
 | DOC-001 | P1 | REQ-EVID-001／SCN-009 | DATA-REPO-METADATA requirements and traceability documents | 1. Parse both documents.<br>2. Compare requirement IDs. | Both documents contain the same requirement ID set. | SUITE-DOC-CONTRACT |
 | DOC-002 | P1 | REQ-EVID-001／SCN-009 | DATA-REPO-METADATA catalog, Automation Map, and pytest modules | 1. Compare Case IDs.<br>2. Parse each mapped script.<br>3. Locate each test function. | Every logical Case ID maps to an existing pytest function. | SUITE-DOC-CONTRACT |
 | DOC-003 | P2 | REQ-EVID-001／SCN-009 | DATA-REPO-METADATA Markdown files | 1. Parse relative Markdown links.<br>2. Resolve each target. | Every relative link points to an existing path. | SUITE-DOC-CONTRACT |
 | DOC-004 | P0 | REQ-SAFE-001／SCN-001 | DATA-REPO-METADATA source, executable tests, and CI workflow | 1. Inspect configured base URLs and endpoint paths.<br>2. Scan for forbidden interface fragments. | Only allowlisted public market-data interfaces are configured; no credential, account, or order interface is referenced. | SUITE-DOC-CONTRACT |
+| DOC-005 | P1 | REQ-EVID-001／SCN-009 | DATA-REPO-METADATA governance, plans, manual specification, and run template | 1. Compare priority and severity definitions.<br>2. Compare manual cases with manual traceability.<br>3. Inspect allowed statuses. | Automated and manual documents share governance definitions; every manual case is mapped; deprecated run statuses are absent. | SUITE-DOC-CONTRACT |
 
 ## Live cases
 
@@ -53,6 +54,6 @@ Each case has one direction of execution and an observable assertion. Decision b
 
 ## Result count
 
-The catalog contains 39 logical Test Case IDs: 34 deterministic and 5 live. Parameterization expands `OB-007`, `OB-009`, `REST-007`, and `REST-008`; `WS-003`／`WS-004`／`WS-005` share three rows of one function. The local review candidate contains 39 deterministic pytest results plus 5 live results. The published baseline still records 25 deterministic plus 5 live results.
+The catalog contains 40 logical Test Case IDs: 35 deterministic and 5 live. Parameterization expands `OB-007`, `OB-009`, `REST-007`, and `REST-008`; `WS-003`／`WS-004`／`WS-005` share three rows of one function. The local governance candidate contains 40 deterministic pytest results plus 5 live results. Public head `8fd5081` records 39 deterministic results; the current governance candidate requires a new public CI run.
 
 The [Automation Map](automation-map.md) links every Case ID to its code path.

@@ -115,3 +115,34 @@ def test_public_scope_uses_only_allowlisted_market_data_interfaces():
         "${{ secrets.",
     )
     assert all(fragment not in audited_text for fragment in forbidden_fragments)
+
+
+def test_manual_lifecycle_and_shared_governance_are_consistent():
+    governance = _read("docs/test-governance.md")
+    test_plan = _read("docs/test-plan.md")
+    manual_lifecycle = _read("docs/manual-testing-lifecycle.md")
+    manual_template = _read("evidence/MANUAL_TEMPLATE.md")
+
+    priority_rows = re.findall(r"^\| P[0-3] \|.*$", governance, re.MULTILINE)
+    severity_rows = re.findall(r"^\| S[0-3] [A-Za-z]+ \|.*$", governance, re.MULTILINE)
+    assert len(priority_rows) == 4
+    assert len(severity_rows) == 4
+    for row in (*priority_rows, *severity_rows):
+        assert row in test_plan
+        assert row in manual_lifecycle
+
+    manual_case_ids = set(
+        re.findall(r"^\| (MTC-[A-Z]+-\d+) \|", manual_lifecycle, re.MULTILINE)
+    )
+    traceability_section = manual_lifecycle.split(
+        "## 7. Manual Requirements Traceability Matrix", maxsplit=1
+    )[1]
+    mapped_manual_case_ids = set(
+        re.findall(r"\bMTC-[A-Z]+-\d+\b", traceability_section)
+    )
+    assert manual_case_ids
+    assert mapped_manual_case_ids == manual_case_ids
+
+    assert "Mixed" not in manual_lifecycle
+    assert "Mixed" not in manual_template
+    assert "Planned | Passed | Failed | Blocked | Incomplete" in governance

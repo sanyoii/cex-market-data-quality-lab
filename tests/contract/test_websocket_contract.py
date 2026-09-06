@@ -121,10 +121,10 @@ async def test_collect_book_tickers_rejects_invalid_market_events(event, message
 
 
 @pytest.mark.asyncio
-async def test_collect_book_tickers_rejects_invalid_subscription_acknowledgement():
+async def test_collect_book_tickers_rejects_invalid_subscription_acknowledgment():
     connection = FakeConnection([{"result": None, "id": 99}])
 
-    with pytest.raises(WebSocketContractError, match="invalid acknowledgement"):
+    with pytest.raises(WebSocketContractError, match="invalid acknowledgment"):
         await collect_book_tickers(
             "BTCUSDT",
             count=1,
@@ -133,7 +133,7 @@ async def test_collect_book_tickers_rejects_invalid_subscription_acknowledgement
 
 
 @pytest.mark.asyncio
-async def test_unsubscribe_waits_past_in_flight_market_events_for_acknowledgement():
+async def test_unsubscribe_waits_past_in_flight_market_events_for_acknowledgment():
     ticker = {"u": 101, "s": "BTCUSDT", "b": "100", "B": "2", "a": "101", "A": "3"}
     connection = FakeConnection(
         [

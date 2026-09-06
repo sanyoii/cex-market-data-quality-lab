@@ -35,8 +35,8 @@ This API project has no UI locator or Page Object Model. Protocol adapters and i
 | WS-001 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_subscribes_validates_and_unsubscribes` |
 | WS-002 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_rejects_decreasing_update_ids` |
 | WS-003, WS-004, WS-005 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_rejects_invalid_market_events` |
-| WS-006 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_rejects_invalid_subscription_acknowledgement` |
-| WS-007 | `tests/contract/test_websocket_contract.py::test_unsubscribe_waits_past_in_flight_market_events_for_acknowledgement` |
+| WS-006 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_rejects_invalid_subscription_acknowledgment` |
+| WS-007 | `tests/contract/test_websocket_contract.py::test_unsubscribe_waits_past_in_flight_market_events_for_acknowledgment` |
 | WS-008 | `tests/contract/test_websocket_contract.py::test_live_depth_sync_discards_stale_buffered_events_and_applies_continuous_updates` |
 | WS-009 | `tests/contract/test_websocket_contract.py::test_subscription_receive_timeout_is_bounded` |
 | WS-010 | `tests/contract/test_websocket_contract.py::test_collect_book_tickers_rejects_malformed_json` |
@@ -46,6 +46,7 @@ This API project has no UI locator or Page Object Model. Protocol adapters and i
 | DOC-002 | `tests/meta/test_documentation_contract.py::test_every_logical_case_maps_to_an_existing_pytest_function` |
 | DOC-003 | `tests/meta/test_documentation_contract.py::test_all_relative_markdown_links_resolve` |
 | DOC-004 | `tests/meta/test_documentation_contract.py::test_public_scope_uses_only_allowlisted_market_data_interfaces` |
+| DOC-005 | `tests/meta/test_documentation_contract.py::test_manual_lifecycle_and_shared_governance_are_consistent` |
 | LIVE-REST-001 | `tests/live/test_rest_live.py::test_live_exchange_info_has_trading_symbol_and_core_filters` |
 | LIVE-REST-002 | `tests/live/test_rest_live.py::test_live_book_ticker_satisfies_market_invariants` |
 | LIVE-REST-003 | `tests/live/test_rest_live.py::test_live_depth_snapshot_builds_a_valid_order_book` |

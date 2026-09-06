@@ -16,7 +16,7 @@ from cex_quality.rest_client import MarketDataRestClient
 
 
 class WebSocketContractError(ValueError):
-    """Raised when a stream acknowledgement or event violates its contract."""
+    """Raised when a stream acknowledgment or event violates its contract."""
 
 
 @dataclass(frozen=True)
@@ -133,7 +133,7 @@ async def _expect_ack(connection: Any, *, request_id: int, timeout: float) -> No
                 return
             if "id" in payload or "result" in payload:
                 raise WebSocketContractError(
-                    f"invalid acknowledgement for request {request_id}: {payload}"
+                    f"invalid acknowledgment for request {request_id}: {payload}"
                 )
 
 

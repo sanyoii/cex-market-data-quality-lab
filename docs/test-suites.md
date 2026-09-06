@@ -7,8 +7,8 @@ Suites group Test Cases for execution. Requirements and Test Cases define expect
 | SUITE-UNIT | Twelve results covering `OB-001`–`OB-009`, including parameterized invalid and empty snapshots. | Local and every CI push／PR | Cases are independent; no required order | Construct in-memory `OrderBook`; no global state |
 | SUITE-REST-CONTRACT | Eleven results covering `REST-001`–`REST-009`, including cardinality and schema parameters. | Local and every CI push／PR | Independent and parallel-safe | Inject `httpx.MockTransport`; context manager closes the client |
 | SUITE-WS-CONTRACT | Twelve results covering `WS-001`–`WS-012`, including three invalid-event parameters. | Local and every CI push／PR | Independent; fake message order is case-local | Create a new fake connection per case; async context exits after the case |
-| SUITE-DOC-CONTRACT | Four results covering `DOC-001`–`DOC-004`. | Local and every CI push／PR | Read-only repository inspection | Parse canonical Markdown, Python AST, configured endpoints, and workflow text |
-| SUITE-REGRESSION | Union of unit, REST contract, WebSocket contract, and documentation contract suites: 39 results. | Push, pull request, and `workflow_dispatch` | Python 3.12／3.14 matrix jobs run independently | Fresh GitHub-hosted job; install package; upload JUnit even on failure |
+| SUITE-DOC-CONTRACT | Five results covering `DOC-001`–`DOC-005`. | Local and every CI push／PR | Read-only repository inspection | Parse canonical Markdown, Python AST, configured endpoints, workflow text, and governance contracts |
+| SUITE-REGRESSION | Union of unit, REST contract, WebSocket contract, and documentation contract suites: 40 results. | Push, pull request, and `workflow_dispatch` | Python 3.12／3.14 matrix jobs run independently | Fresh GitHub-hosted job; install package; upload JUnit even on failure |
 | SUITE-LIVE | Five cases: `LIVE-REST-001`–`003`, `LIVE-WS-001`, `LIVE-SYNC-001`. | Manually triggered workflow only | pytest executes the job sequentially; cases share no persistent state | New public clients／connections per case; bounded 30-second case timeout; no cleanup data |
 
 ## Commands

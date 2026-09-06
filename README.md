@@ -2,19 +2,22 @@
 
 [![Tests](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml/badge.svg)](https://github.com/sanyoii/cex-market-data-quality-lab/actions/workflows/tests.yml)
 
-Status: Local review candidate with uncommitted documentation changes on public head `a09ad29`. The recorded implementation baseline passed deterministic CI and manually triggered live automation on 2026-08-14.
+Status: reviewed revision based on `8fd5081`, authorized for commit and push. Check the commit's Actions run for public CI; historical receipts below retain their original revision boundaries.
 
-This Python／pytest project validates Binance Spot public market data across REST snapshots and WebSocket updates. It focuses on failures that can silently corrupt a local order book: stale events, sequence gaps, invalid numeric values, crossed prices, mismatched control acknowledgements, and unbounded waits.
+2026-09-06 local review: corrected the employment attribution below and reran 40 deterministic and 5 live tests. See [the local review receipt](evidence/2026-09-06-local-review-run.md). The historical CI results below describe their recorded revisions; they are not a current-head CI claim.
 
-I built this personal portfolio project independently from my work at Binance and BTSE. I use no API key, authentication, account data, order placement, or real funds.
+This Python／pytest project validates Binance Spot public market data across REST snapshots and WebSocket updates. It focuses on failures that can silently corrupt a local order book: stale events, sequence gaps, invalid numeric values, crossed prices, mismatched control acknowledgments, and unbounded waits.
+
+This personal portfolio project uses Binance public market-data APIs and is separate from my employment experience at BTSE. I use no API key, authentication, account data, order placement, or real funds.
 
 ## Verification at a glance
 
 | State | Revision／source state | Evidence |
 |---|---|---|
-| Local review candidate | Uncommitted documentation changes on `a09ad29e34d05a7fd9509379c0e1f56b4be19cab` | Documentation gates and 39 deterministic results passed locally; public CI pending |
-| Published implementation baseline | `b1397ef67a0b1d364a4d776c21effac6e4d452c1` | 25 deterministic results passed on Python 3.12／3.14 and 5 live results passed on Python 3.14 |
-| Prior published repository verification | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | [Deterministic run 31813499294](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813499294) and [live run 31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) passed with 0 annotations |
+| Day 22 fresh local completion | Uncommitted candidate based on `8fd5081254b5429e480ec20a56ef09bcc6f5ab9e` | [40 deterministic and 5 live results passed locally on 2026-09-02](evidence/2026-09-02-day22-local-run.md); public CI/current-head live remains incomplete |
+| Local governance candidate | Uncommitted governance and documentation changes based on `8fd5081254b5429e480ec20a56ef09bcc6f5ab9e` | [40 deterministic and 5 live results passed locally](evidence/2026-08-15-governance-candidate-run.md); public CI pending |
+| Historical public deterministic | `8fd5081254b5429e480ec20a56ef09bcc6f5ab9e` | [Run 31823105148](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31823105148) passed 39 results on Python 3.12 and 3.14; live job skipped by push rules |
+| Latest public live receipt | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | [Run 31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) passed 5 live cases; this does not verify current head |
 
 Reviewer path: read this table, inspect the [Traceability Matrix](docs/traceability-matrix.md), then open the [Test Run records](evidence/README.md). Human exploratory charters are designed but have not been executed.
 
@@ -22,26 +25,33 @@ Reviewer path: read this table, inspect the [Traceability Matrix](docs/traceabil
 
 ```mermaid
 flowchart LR
-    R["Requirements and Business Rules"] --> P["Test Plan and Strategy"]
-    P --> S["Test Scenarios"]
-    S --> C["Test Cases"]
-    C --> D["Test Data Profiles"]
-    C --> U["Test Suites"]
-    D --> A["Test Scripts"]
-    U --> A
-    A --> E["Test Runs and Evidence"]
+    R["Requirements and Business Rules"] --> S
+    subgraph S["Test Specification"]
+        P["Test Plan and Strategy"]
+        N["Test Scenarios"]
+        C["Test Cases"]
+        D["Test Data Profiles"]
+        U["Test Suites"]
+        A["Test Scripts"]
+        P --> N --> C
+        C --> D
+        C --> U
+        D --> A
+        U --> A
+    end
+    S --> E["Test Runs and Evidence"]
     E --> F["Defects and Test Summary"]
     F -. feedback .-> R
 ```
 
-`Test Specification` indexes these artifacts. The Test Plan defines scope and execution strategy. `Test Data Profile` describes test inputs; the project avoids the ambiguous label `Test Profile` by itself.
+`Test Specification` is the container and index for the design artifacts. The Test Plan defines scope and execution strategy. `Test Data Profile` describes test inputs; the project avoids the ambiguous label `Test Profile` by itself.
 
 | Lifecycle artifact | This project |
 |---|---|
 | Requirements | 9 project-local `REQ-*` IDs linked to official contracts or project policy |
 | Test Plan | Scope, strategy, infrastructure, entry／exit criteria, priority, timeout, and retry policy |
 | Test Scenarios | 9 system-level REST, WebSocket, synchronization, and evidence intents |
-| Test Cases | 39 logical IDs with priority, preconditions, atomic actions, expected results, data, and suite |
+| Test Cases | 40 logical IDs with priority, preconditions, atomic actions, expected results, data, and suite |
 | Test Data | 9 static, boundary, invalid, protocol, repository, and dynamic live profiles |
 | Test Suites | Unit, REST contract, WebSocket contract, documentation contract, deterministic regression, and manually triggered live automation |
 | Test Scripts | 3 production modules and 6 pytest modules with complete case-to-function mapping |
@@ -64,7 +74,7 @@ This portfolio repository has no Jira project. The repo uses stable project-loca
 | REQ-REST-002 | Validate depth request parameters, update ID, levels, both sides, and market ordering. |
 | REQ-REST-003 | Return a single requested symbol's status and filter types from `exchangeInfo`. |
 | REQ-REST-004 | Preserve HTTP／exchange error details and the bounded REST timeout type. |
-| REQ-WS-001 | Correlate subscribe／unsubscribe acknowledgements and bound every receive wait. |
+| REQ-WS-001 | Correlate subscribe／unsubscribe acknowledgments and bound every receive wait. |
 | REQ-WS-002 | Validate event symbol, numbers, market ordering, and non-decreasing update IDs. |
 | REQ-SYNC-001 | Discard stale events, apply continuous updates, delete zero-quantity levels, and stop before mutation on a sequence gap. |
 | REQ-EVID-001 | Keep deterministic and live results separate and record revision, environment, result, limitations, and JUnit artifacts. |
@@ -103,10 +113,10 @@ Excluded:
 | Unit | 12 | Order-book state transitions and invariants | No |
 | REST contract | 11 | Request shape, parsing, schema failures, errors, cardinality, and timeout with `httpx.MockTransport` | No |
 | WebSocket contract | 12 | Control, JSON／schema validation, ordering, synchronization, and timeout with fake connections | No |
-| Documentation contract | 4 | Traceability, script mapping, links, and public-only scope | No |
+| Documentation contract | 5 | Traceability, script mapping, links, public-only scope, and shared governance | No |
 | Live integration | 5 | Current public REST／WebSocket compatibility | Yes |
 
-The local review candidate contains 39 deterministic results. The published baseline records 25 deterministic results on Python 3.12 and 3.14. Live automation runs only through `workflow_dispatch` on Python 3.14 and does not replace deterministic coverage.
+The local governance candidate contains 40 deterministic results. Public head `8fd5081` passed 39 deterministic results on Python 3.12 and 3.14. Live automation runs only through `workflow_dispatch` on Python 3.14 and does not replace deterministic coverage.
 
 ### Entry criteria
 
@@ -117,7 +127,7 @@ The local review candidate contains 39 deterministic results. The published base
 
 ### Exit criteria
 
-- All 39 deterministic results pass on Python 3.12 and 3.14 before publication.
+- All 40 deterministic results pass on Python 3.12 and 3.14 before publication.
 - All requirements map to an executable case or explicit inspection gate.
 - No known open S0／S1 defect remains in the published baseline.
 - A publication verification records the five-case live result without hiding external failures.
@@ -127,17 +137,17 @@ Full plan: [Test Plan and Strategy](docs/test-plan.md).
 
 ## Test Scenarios
 
-| ID | System-level intent | Requirements |
-|---|---|---|
-| SCN-001 | Read a public symbol book ticker and reject unusable top-of-book data. | REQ-SAFE-001, REQ-REST-001 |
-| SCN-002 | Request public depth and construct a valid local order-book snapshot. | REQ-REST-002, REQ-SYNC-001 |
-| SCN-003 | Read exchange metadata needed to interpret a public symbol. | REQ-REST-003 |
-| SCN-004 | Preserve a structured exchange error for diagnosis. | REQ-REST-004 |
-| SCN-005 | Subscribe, validate stream events, and unsubscribe safely. | REQ-WS-001, REQ-WS-002 |
-| SCN-006 | Reject malformed JSON, wrong shape, missing fields, wrong-symbol, invalid-number, crossed, or out-of-order events. | REQ-WS-002 |
-| SCN-007 | Align a REST snapshot with buffered diff-depth events. | REQ-REST-002, REQ-SYNC-001 |
-| SCN-008 | Detect stale events and sequence gaps without corrupting state. | REQ-SYNC-001 |
-| SCN-009 | Produce reproducible deterministic evidence and distinct live evidence. | REQ-EVID-001 |
+| ID | Type | System-level intent | Requirements |
+|---|---|---|---|
+| SCN-001 | Positive／safety | Read a public symbol book ticker and reject unusable top-of-book data. | REQ-SAFE-001, REQ-REST-001 |
+| SCN-002 | Positive／state | Request public depth and construct a valid local order-book snapshot. | REQ-REST-002, REQ-SYNC-001 |
+| SCN-003 | Positive | Read exchange metadata needed to interpret a public symbol. | REQ-REST-003 |
+| SCN-004 | Negative | Preserve a structured exchange error for diagnosis. | REQ-REST-004 |
+| SCN-005 | Positive／protocol | Subscribe, validate stream events, and unsubscribe safely. | REQ-WS-001, REQ-WS-002 |
+| SCN-006 | Negative | Reject malformed JSON, wrong shape, missing fields, wrong-symbol, invalid-number, crossed, or out-of-order events. | REQ-WS-002 |
+| SCN-007 | Positive／state | Align a REST snapshot with buffered diff-depth events. | REQ-REST-002, REQ-SYNC-001 |
+| SCN-008 | Negative／state | Detect stale events and sequence gaps without corrupting state. | REQ-SYNC-001 |
+| SCN-009 | Evidence | Produce reproducible deterministic evidence and distinct live evidence. | REQ-EVID-001 |
 
 [Test Scenarios](docs/test-scenarios.md) documents the service boundaries.
 
@@ -148,15 +158,15 @@ Full plan: [Test Plan and Strategy](docs/test-plan.md).
 | SUITE-UNIT | Twelve `OB-*` results | Local and CI | New in-memory book per case; no shared state |
 | SUITE-REST-CONTRACT | Eleven `REST-*` results | Local and CI | Inject mock transport; close client after each case |
 | SUITE-WS-CONTRACT | Twelve `WS-*` results | Local and CI | New fake message queue and async context per case |
-| SUITE-DOC-CONTRACT | Four `DOC-*` results | Local and CI | Read-only parsing of repository contracts |
-| SUITE-REGRESSION | All 39 deterministic results | Push, PR, `workflow_dispatch` | Fresh job per Python version; JUnit uploaded even on failure |
+| SUITE-DOC-CONTRACT | Five `DOC-*` results | Local and CI | Read-only parsing of repository contracts |
+| SUITE-REGRESSION | All 40 deterministic results | Push, PR, `workflow_dispatch` | Fresh job per Python version; JUnit uploaded even on failure |
 | SUITE-LIVE | Five `LIVE-*` cases | Manually triggered workflow only | New public client／connection per case; 30-second case timeout |
 
 Cases are independent and have no required cross-case order. The workflow uses sequential pytest execution per job; deterministic cases retain case-local state so a parallel runner can isolate them. Full execution rules: [Test Suites](docs/test-suites.md).
 
 ## Test Cases
 
-Priority is execution importance, not defect severity: P0 protects safety or state integrity; P1 covers core contracts; P2 covers defensive edges; P3 is future or informational coverage.
+Priority is execution importance, not defect severity: P0 protects safety or state integrity; P1 covers core functional, contract, synchronization, traceability, or release-evidence behavior; P2 covers defensive edges; P3 is future or informational coverage.
 
 Defects use a separate S0 Critical through S3 Low impact scale. The [Test Plan](docs/test-plan.md) defines both models.
 
@@ -188,8 +198,8 @@ Defects use a separate S0 Critical through S3 Low impact scale. The [Test Plan](
 | WS-003 | P1 | The WebSocket client rejects a wrong-symbol event. |
 | WS-004 | P0 | The WebSocket client rejects a non-positive stream field. |
 | WS-005 | P0 | The WebSocket client rejects a crossed stream event. |
-| WS-006 | P1 | The WebSocket client rejects a wrong acknowledgement ID. |
-| WS-007 | P1 | The WebSocket client tolerates an in-flight market event while waiting for unsubscribe acknowledgement. |
+| WS-006 | P1 | The WebSocket client rejects a wrong acknowledgment ID. |
+| WS-007 | P1 | The WebSocket client tolerates an in-flight market event while waiting for unsubscribe acknowledgment. |
 | WS-008 | P0 | Buffered stream and REST snapshot synchronize through continuous updates. |
 | WS-009 | P1 | Slow receive stops at the configured timeout. |
 | WS-010 | P1 | Malformed JSON produces a stable WebSocket contract error. |
@@ -199,6 +209,7 @@ Defects use a separate S0 Critical through S3 Low impact scale. The [Test Plan](
 | DOC-002 | P1 | Every logical Case ID maps to an existing pytest function. |
 | DOC-003 | P2 | Every relative Markdown link resolves. |
 | DOC-004 | P0 | Configured interfaces remain inside the public market-data allowlist. |
+| DOC-005 | P1 | Automated and manual documents share governance, statuses, and traceability. |
 | LIVE-REST-001 | P1 | Current `exchangeInfo` symbol status and filters. |
 | LIVE-REST-002 | P1 | Current public book-ticker invariants. |
 | LIVE-REST-003 | P1 | Current public depth builds valid state. |
@@ -207,7 +218,7 @@ Defects use a separate S0 Critical through S3 Low impact scale. The [Test Plan](
 
 </details>
 
-The catalog contains 39 logical IDs: 34 deterministic and 5 live. Parameterization expands the local candidate to 39 deterministic pytest results plus 5 live results. Preconditions, atomic actions, expected results, data, and suite assignment are in [Test Cases](docs/test-cases.md).
+The catalog contains 40 logical IDs: 35 deterministic and 5 live. Parameterization expands the local governance candidate to 40 deterministic pytest results plus 5 live results. Preconditions, atomic actions, expected results, data, and suite assignment are in [Test Cases](docs/test-cases.md).
 
 ## Test Data Profiles
 
@@ -231,7 +242,7 @@ Each case recreates its synthetic data and uses reserved `.invalid` hosts. Live 
 |---|---|---|
 | Order-book logic | `src/cex_quality/order_book.py` | State transitions, stale／gap handling, deletion, and market invariants |
 | REST adapter | `src/cex_quality/rest_client.py` | Request construction, `Decimal` parsing, error preservation, and validation |
-| WebSocket adapter | `src/cex_quality/websocket_client.py` | Control acknowledgements, bounded receives, event validation, and synchronization |
+| WebSocket adapter | `src/cex_quality/websocket_client.py` | Control acknowledgments, bounded receives, event validation, and synchronization |
 | Unit scripts | `tests/unit/test_order_book.py` | `OB-*` cases |
 | Contract scripts | `tests/contract/` | `REST-*` and `WS-*` cases through injected I/O |
 | Live scripts | `tests/live/` | `LIVE-*` cases against public services |
@@ -253,9 +264,9 @@ Every Test Case ID maps to an exact pytest function in the [Automation Map](docs
 | REQ-WS-001 | SCN-005 | WS-001, WS-006, WS-007, WS-009, LIVE-WS-001 |
 | REQ-WS-002 | SCN-005, SCN-006 | WS-001–WS-005, WS-010–WS-012, LIVE-WS-001 |
 | REQ-SYNC-001 | SCN-002, SCN-007, SCN-008 | OB-001–OB-009, WS-008, LIVE-SYNC-001 |
-| REQ-EVID-001 | SCN-009 | DOC-001–DOC-003, SUITE-REGRESSION, SUITE-LIVE, workflow, and evidence schema |
+| REQ-EVID-001 | SCN-009 | DOC-001–DOC-003, DOC-005, SUITE-REGRESSION, SUITE-LIVE, workflow, and evidence schema |
 
-The matrix maps 9／9 requirements, 9／9 scenarios, and 39／39 logical Test Case IDs. Mapping strength is labeled Automated, Live, or Inspection in the full document. These are traceability counts, not source-code coverage. Full mapping: [Requirements Traceability Matrix](docs/traceability-matrix.md).
+The matrix maps 9／9 requirements, 9／9 scenarios, and 40／40 logical Test Case IDs. Mapping strength is labeled Automated, Live, or Inspection in the full document. These are traceability counts, not source-code coverage. Full mapping: [Requirements Traceability Matrix](docs/traceability-matrix.md).
 
 ## Test Runs, evidence, and defects
 
@@ -266,12 +277,15 @@ The matrix maps 9／9 requirements, 9／9 scenarios, and 39／39 logical Test Ca
 | Local live | Same local candidate | Windows, Python 3.14.2 | 5 passed | Local JUnit hash recorded |
 | Public deterministic | `b1397ef67a0b1d364a4d776c21effac6e4d452c1` | GitHub-hosted Ubuntu, Python 3.12／3.14 | 25 passed on each version | JUnit artifacts |
 | Public live automation | Same implementation revision | GitHub-hosted Ubuntu, Python 3.14 | 5 passed | Manually triggered live JUnit artifact |
-| Published repository verification | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | GitHub-hosted Ubuntu | Deterministic matrix and manually triggered live jobs passed; 0 annotations | [Runs 31813499294](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813499294) and [31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) |
+| Current public deterministic | `8fd5081254b5429e480ec20a56ef09bcc6f5ab9e` | GitHub-hosted Ubuntu, Python 3.12／3.14 | 39 passed on each version; live job skipped | [Current-head receipt](evidence/2026-08-15-current-head-ci-status.md) |
+| Historical public live | `9ce65e03b834c79c95bf2488c471be68cb7b1166` | GitHub-hosted Ubuntu, Python 3.14 | 5 passed; not current-head evidence | [Run 31813561202](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31813561202) |
 
-The first live unsubscribe run exposed one S2 Medium defect. The client misclassified a valid in-flight ticker that arrived before the acknowledgement, producing a false test failure without market-state corruption. The fix waits for the matching request ID, `WS-007` covers the ordering, and the evidence retains the original failure. Open known S0／S1 defects: 0.
+The first live unsubscribe run exposed one S2 Medium defect. The client misclassified a valid in-flight ticker that arrived before the acknowledgment, producing a false test failure without market-state corruption. The fix waits for the matching request ID, `WS-007` covers the ordering, and the evidence retains the original failure. Open known S0／S1 defects: 0.
 
 - [Local execution record](evidence/2026-08-14-local-live-run.md)
 - [Current local candidate record](evidence/2026-08-15-local-candidate-run.md)
+- [Current governance candidate record](evidence/2026-08-15-governance-candidate-run.md)
+- [Current-head public deterministic status](evidence/2026-08-15-current-head-ci-status.md)
 - [Public CI and live verification](evidence/2026-08-14-public-ci-run.md)
 - [Reusable Test Run template](evidence/TEMPLATE.md)
 - [Test Summary Report](docs/test-summary-report.md)
@@ -311,6 +325,7 @@ The deterministic command requires no network access. The live command calls pub
 - [Test Specification](docs/test-specification.md)
 - [Requirements and Business Rules](docs/requirements.md)
 - [Test Plan and Strategy](docs/test-plan.md)
+- [Test Governance](docs/test-governance.md)
 - [Test Scenarios](docs/test-scenarios.md)
 - [Test Suites](docs/test-suites.md)
 - [Test Cases](docs/test-cases.md)

@@ -1,6 +1,6 @@
 # Test Run Record: YYYY-MM-DD
 
-Status: Planned, Passed, Failed, Blocked, or Mixed.
+Status: Planned, Passed, Failed, Blocked, or Incomplete. See [Test Governance](../docs/test-governance.md).
 
 ## Run identity
 
@@ -37,7 +37,7 @@ Record every attempt. Keep an earlier Fail or Blocked row after a later pass.
 
 ## Observed result
 
-- Final state: `<Pass, Fail, Blocked, Skipped, or Mixed>`
+- Final state: `<Passed, Failed, Blocked, or Incomplete>`
 - Failed／blocked cases: `<IDs and concise causes>`
 - Warnings: `<warnings or none>`
 - External-service conditions: `<observed conditions or not applicable>`

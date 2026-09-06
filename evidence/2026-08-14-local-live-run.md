@@ -70,7 +70,7 @@ An earlier live command collected four tests and returned:
 Exit code: 1
 ```
 
-The unsubscribe request received another valid `bookTicker` event before the acknowledgement. The client treated that in-flight event as an invalid acknowledgement. A deterministic regression test now reproduces the ordering. The client waits past market events for the matching request ID, while still rejecting an acknowledgement with the wrong ID. The final five-case live suite passed after that change.
+The unsubscribe request received another valid `bookTicker` event before the acknowledgment. The client treated that in-flight event as an invalid acknowledgment. A deterministic regression test now reproduces the ordering. The client waits past market events for the matching request ID, while still rejecting an acknowledgment with the wrong ID. The final five-case live suite passed after that change.
 
 ## Additional checks
 

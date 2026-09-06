@@ -1,6 +1,6 @@
 # Manual Test Run: YYYY-MM-DD
 
-Status: Planned, Pass, Fail, Blocked, or Mixed.
+Status: Planned, Passed, Failed, Blocked, or Incomplete. See [Test Governance](../docs/test-governance.md).
 
 ## Run identity
 
@@ -22,12 +22,21 @@ Status: Planned, Pass, Fail, Blocked, or Mixed.
 - REST base URL: `<URL>`
 - WebSocket base URL: `<URL>`
 - Credential check: `<none configured or stop the run>`
+- Control acknowledgment timeout: `<10 seconds recommended, or value and reason>`
+- Event receive timeout: `<10 seconds recommended, or value and reason>`
+- Case timeout: `<30 seconds recommended, or value and reason>`
 
 ## Case results
 
-| Case ID | Start／end UTC | Actual result | Status | Evidence path | Defect ID | Retry count | Cleanup |
-|---|---|---|---|---|---|---:|---|
-| `MTC-*` | `<times>` | `<observed values and behavior>` | `<Pass／Fail／Blocked／Skipped>` | `<path or URL>` | `<ID or none>` | `0` | `<completed／not required／blocked>` |
+| Case ID | Requirement／scenario | Start／end UTC | Expected result | Actual result | Status | Evidence path | SHA-256／availability | Defect ID | Retry count | Cleanup |
+|---|---|---|---|---|---|---|---|---|---:|---|
+| `MTC-*` | `<REQ-*／MSCN-*>` | `<times>` | `<observable expectation>` | `<observed values and behavior>` | `<Pass／Fail／Blocked／Skipped>` | `<evidence/manual/run-id/path>` | `<hash or unavailable with reason>` | `<ID or none>` | `0` | `<completed／not required／blocked>` |
+
+## Artifact inventory
+
+| Artifact | Related case | Relative path or URL | SHA-256 | Accessibility／retention |
+|---|---|---|---|---|
+| `<response, frame log, screenshot, or worksheet>` | `<MTC-*>` | `<path or URL>` | `<hash or unavailable with reason>` | `<checked status and retention>` |
 
 ## Defects
 
@@ -47,6 +56,7 @@ Status: Planned, Pass, Fail, Blocked, or Mixed.
 - External-service conditions: `<observed conditions>`
 - Retries: `<count and reason>`
 - Coverage gaps: `<unexecuted cases or unavailable evidence>`
+- Warnings／blockers: `<none or details>`
 - Release recommendation: `<recommend, reject, or no decision>`
 
 ## Review

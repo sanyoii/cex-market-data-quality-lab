@@ -1,24 +1,35 @@
 # Test Specification
 
-Status: Local review candidate. Public CI verification pending.
+Status: Local governance candidate based on public head `8fd5081`. Public CI for this candidate and current-head live automation are pending.
 
-This specification indexes the project's QA lifecycle. The Test Plan defines scope and execution strategy.
+This specification is the container and index for the project's QA design artifacts. It is not a sequential lifecycle step.
 
-```text
-Requirement and Business Rules
-  -> Test Plan and Strategy
-  -> Test Scenarios
-  -> Test Cases and Test Data
-  -> Test Suites
-  -> Test Scripts
-  -> Test Runs
-  -> Defect History and Test Summary
+```mermaid
+flowchart LR
+    R["Requirements and Business Rules"] --> S
+    subgraph S["Test Specification"]
+        P["Test Plan and Strategy"]
+        N["Test Scenarios"]
+        C["Test Cases"]
+        D["Test Data Profiles"]
+        U["Test Suites"]
+        A["Test Scripts"]
+        P --> N --> C
+        C --> D
+        C --> U
+        D --> A
+        U --> A
+    end
+    S --> E["Test Runs and Evidence"]
+    E --> F["Defects and Test Summary"]
+    F -. feedback .-> R
 ```
 
 | Lifecycle artifact | Canonical document／path |
 |---|---|
 | Requirements and business rules | [requirements.md](requirements.md) |
 | Acceptance and completion gate | [acceptance-criteria.md](acceptance-criteria.md) |
+| Shared governance | [test-governance.md](test-governance.md) |
 | Test Plan and strategy | [test-plan.md](test-plan.md) |
 | Test Scenarios | [test-scenarios.md](test-scenarios.md) |
 | Test Cases | [test-cases.md](test-cases.md) |

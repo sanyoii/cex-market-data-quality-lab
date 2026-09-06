@@ -1,6 +1,6 @@
 # Test Plan and Strategy
 
-Status: Active for the local review candidate. Public CI verification pending.
+Status: Active for the local governance candidate based on public head `8fd5081`. Public CI for this candidate and current-head live automation are pending.
 
 ## Objective
 
@@ -27,11 +27,11 @@ Excluded:
 |---|---:|---|---|
 | Unit | 12 pytest results | Order-book state transitions and invariants | No |
 | REST contract | 11 pytest results | Request shape, response parsing, schema failures, errors, cardinality, and timeout through `httpx.MockTransport` | No |
-| WebSocket contract | 12 pytest results | Control acknowledgements, JSON／schema validation, ordering, synchronization, and timeout through fake connections | No |
-| Documentation contract | 4 pytest results | Requirements mapping, case-to-script mapping, Markdown links, and public-only scope | No |
+| WebSocket contract | 12 pytest results | Control acknowledgments, JSON／schema validation, ordering, synchronization, and timeout through fake connections | No |
+| Documentation contract | 5 pytest results | Requirements mapping, case-to-script mapping, Markdown links, public-only scope, and shared governance | No |
 | Live integration | 5 pytest results | Current public REST／WebSocket compatibility and snapshot／stream synchronization | Yes |
 
-The local review candidate contains 39 deterministic results. The published implementation baseline remains 25 deterministic results plus 5 live results until these local changes are committed and verified in public CI. Live tests do not replace deterministic coverage and do not run on every push.
+The local governance candidate contains 40 deterministic results. Public head `8fd5081` passed 39 deterministic results on Python 3.12 and 3.14 in [run 31823105148](https://github.com/sanyoii/cex-market-data-quality-lab/actions/runs/31823105148). Current-head live automation has not run; the latest public live receipt remains the historical `9ce65e0` run. Live tests do not replace deterministic coverage and do not run on every push.
 
 [Exploratory charters](exploratory-charters.md) cover schema drift, disconnect／resynchronization, symbol boundaries, and injected rate-limit or network-policy failures. Their status is Designed, not executed; no human exploratory result is included in the PASS evidence.
 
@@ -56,7 +56,7 @@ The local review candidate contains 39 deterministic results. The published impl
 
 ## Exit criteria
 
-- All 39 deterministic results pass on Python 3.12 and 3.14 before publication.
+- All 40 deterministic results pass on Python 3.12 and 3.14 before publication.
 - All requirements in the traceability matrix map to at least one test or explicit inspection gate.
 - No known open S0 or S1 defect remains for the published baseline.
 - A publication verification includes a manually triggered five-case live automation result. External failures remain visible as Fail or Blocked.
@@ -64,16 +64,20 @@ The local review candidate contains 39 deterministic results. The published impl
 
 ## Priority model
 
+The canonical definitions are in [Test Governance](test-governance.md).
+
 | Priority | Meaning | Release treatment |
 |---|---|---|
 | P0 | Safety boundary or state-corruption risk | Must pass |
-| P1 | Core REST／WebSocket contract or synchronization behavior | Must pass |
+| P1 | Core functional, contract, synchronization, traceability, or release-evidence behavior | Must pass |
 | P2 | Defensive edge behavior with bounded impact | Must pass for regression baseline |
 | P3 | Informational or future coverage | Does not block unless promoted |
 
 Test priority controls execution importance. Defect severity rates the impact of the observed failure.
 
 ## Defect severity model
+
+The canonical definitions are in [Test Governance](test-governance.md).
 
 | Severity | Impact | Release treatment |
 |---|---|---|

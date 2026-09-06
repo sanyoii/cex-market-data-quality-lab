@@ -1,6 +1,6 @@
 # Acceptance Criteria
 
-Status: Local review candidate. Public CI and live evidence remain available for the 2026-08-14 baseline.
+Status: Local governance candidate based on public head `8fd5081`. Current-head deterministic CI passed; current-head live automation is pending.
 
 Requirement IDs and business-rule sources are defined in [Requirements and Business Rules](requirements.md).
 
@@ -16,7 +16,7 @@ The project checks Binance Spot public market data through REST and WebSocket in
 - Remove a price level when an update sets its quantity to zero.
 - Reject an empty or crossed order book.
 - Validate REST success and structured error responses.
-- Validate WebSocket subscription acknowledgement, event schema, symbol, prices, quantities, timeout, and unsubscribe acknowledgement.
+- Validate WebSocket subscription acknowledgment, event schema, symbol, prices, quantities, timeout, and unsubscribe acknowledgment.
 - Produce separate deterministic and live test results.
 
 ## Completion gate

@@ -1,6 +1,6 @@
 # Requirements and Business Rules
 
-Status: Local review candidate. The published baseline was verified against the implementation and public contracts on 2026-08-14.
+Status: Local governance candidate based on public head `8fd5081`. Current-head deterministic CI passed; current-head live automation is pending.
 
 This portfolio project has no Jira project, so it uses stable project-local requirement IDs instead of invented issue keys. Binance's official Spot API documentation defines external contracts. Project policies define local quality rules.
 
@@ -13,7 +13,7 @@ This portfolio project has no Jira project, so it uses stable project-local requ
 | REQ-REST-002 | The REST client must validate a depth snapshot before returning it. | Send the normalized symbol and requested limit; require a positive update ID, positive levels, both sides, and a non-crossed book. | Binance REST: Order book |
 | REQ-REST-003 | The REST client must return the requested symbol's exchange metadata. | Require a single symbol and retain its symbol, trading status, and filter types. | Binance REST: Exchange information |
 | REQ-REST-004 | REST failures must remain diagnosable. | Preserve HTTP status, exchange error code, and exchange message for an error response; preserve the bounded `httpx.ReadTimeout` type for a transport timeout. | Binance REST error response contract plus project timeout policy |
-| REQ-WS-001 | The WebSocket client must bound subscription waits and correlate control messages. | Send subscribe／unsubscribe requests, accept only the matching acknowledgement ID, tolerate an in-flight market event while waiting, and stop on timeout. | Binance WebSocket live subscribing／unsubscribing |
+| REQ-WS-001 | The WebSocket client must bound subscription waits and correlate control messages. | Send subscribe／unsubscribe requests, accept only the matching acknowledgment ID, tolerate an in-flight market event while waiting, and stop on timeout. | Binance WebSocket live subscribing／unsubscribing |
 | REQ-WS-002 | Book-ticker stream events must satisfy the expected contract. | Require the expected symbol, positive prices and quantities, a non-crossed market, and non-decreasing update IDs. | Binance Individual Symbol Book Ticker Streams |
 | REQ-SYNC-001 | A REST snapshot and diff-depth stream must create a consistent local order book. | Discard stale events, apply continuous updates in order, delete zero-quantity levels, reject crossed or empty state, and fail before mutation on a sequence gap. | Binance local order-book synchronization procedure plus project invariants |
 | REQ-EVID-001 | Deterministic and live evidence must remain distinguishable. | Deterministic tests run without network access; live tests run in a distinct job; each published run records revision, environment, result, limitations, and JUnit artifacts. | Project evidence policy |
